@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APICatalago.Domain;
 
@@ -18,6 +19,7 @@ public class Categoria
     [StringLength(300)]
     public String? ImagemURL{ get; set; }
 
+    [JsonIgnore]
     public ICollection<Produto>? Produtos { get; set; }
 
     public Categoria() => Produtos = new Collection<Produto>();

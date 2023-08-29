@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APICatalago.Domain;
 
@@ -7,8 +8,9 @@ namespace APICatalago.Domain;
 [Table("Produtos")]
 public class Produto
 {
+
     [Key]
-    public int ProdutoId{ get; set; }
+    public int? ProdutoId{ get; set; }
 
     [Required]
     [StringLength(80)]
@@ -28,5 +30,7 @@ public class Produto
     public double? Estoque{ get; set; }
     public DateTime DataCadastro { get; set; }
     public int? CategoriaId { get; set; }
+
+    [JsonIgnore]
     public Categoria? Categoria { get; set; }
 }
