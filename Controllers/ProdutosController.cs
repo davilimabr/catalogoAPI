@@ -1,7 +1,6 @@
-﻿using APICatalago.Context;
-using APICatalago.Domain;
-using APICatalago.DTO;
-using AutoMapper;
+﻿using Catalogo.Aplicacao.DTO;
+using Catalogo.Aplicacao.Interface.Produto;
+using Catalogo.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,47 +12,53 @@ namespace APICatalago.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDBContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IObterProdutos _obterProdutos;
+        private readonly IObterProdutoPorId _obterProdutoPorId;
+        private readonly IAdicionarProduto _adicionarProduto;
+        private readonly IAtualizarProduto _atualizarProduto;
+        private readonly IDeletarProduto _deletarProduto;
 
-
-        public ProdutosController(AppDBContext context, IMapper mapper)
+        public ProdutosController(
+            IObterProdutos obterProdutos, IObterProdutoPorId obterProdutoPorId, IAdicionarProduto adicionarProduto,
+            IAtualizarProduto atualizarProduto, IDeletarProduto deletarProduto)
         {
-            _dbContext = context;
-            _mapper = mapper;
+            _obterProdutos = obterProdutos;
+            _obterProdutoPorId = obterProdutoPorId;
+            _adicionarProduto = adicionarProduto;
+            _atualizarProduto = atualizarProduto;
+            _deletarProduto = deletarProduto;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<ProdutoDto>> ObterProdutos()
         {
-            var produtos = _dbContext.produtos.ToList();
+            var produtos = _obterProdutos.Executar();
 
             if (produtos is null)
                 return NotFound();
 
-            return Ok(_mapper.Map<IEnumerable<ProdutoDto>>(produtos));
+            return Ok(produtos);
         }
 
         [HttpGet]
         [Route("{id:int}", Name = "ObterProduto")]
         public ActionResult<ProdutoDto> ObterProdutoPorId(int id)
         {
-            var produto = _dbContext.produtos.FirstOrDefault(p => p.ProdutoId == id);
+            var produto = _obterProdutoPorId.Executar(id);
 
             if (produto is null)
                 return NotFound();
 
-            return Ok(_mapper.Map<ProdutoDto>(produto));
+            return Ok(produto);
         }
 
         [HttpPost]
-        public ActionResult CriarNovoProduto([FromBody] Produto produto)
+        public ActionResult CriarNovoProduto([FromBody] ProdutoModel produto)
         {
             if (produto is null)
                 return BadRequest();
 
-            _dbContext.produtos.Add(produto);
-            _dbContext.SaveChanges();
+            _adicionarProduto.Executar(produto);
 
             return new CreatedAtRouteResult("ObterProduto",
               new { id = produto.ProdutoId }, produto);
@@ -61,13 +66,12 @@ namespace APICatalago.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public ActionResult AtualizarProduto(int id, [FromBody] Produto produto)
+        public ActionResult AtualizarProduto(int id, [FromBody] ProdutoModel produto)
         {
             if (produto is null || id != produto.ProdutoId)
                 return BadRequest();
 
-            _dbContext.Entry(produto).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            _atualizarProduto.Executar(produto);
 
             return Ok(produto);
         }
@@ -76,15 +80,9 @@ namespace APICatalago.Controllers
         [Route("{id:int}")]
         public ActionResult DeletarProduto(int id)
         {
-            var produto = _dbContext.produtos.FirstOrDefault(p => p.ProdutoId == id);
-
-            if (produto is null) return NotFound();
-
-            _dbContext.Remove(produto);
-            _dbContext.SaveChanges();
+            _deletarProduto.Executar(id);
 
             return NoContent();
-
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using APICatalago.Context;
-using APICatalago.Domain;
-using APICatalago.DTO;
-using AutoMapper;
+﻿using AutoMapper;
+using Catalogo.Aplicacao.Context;
+using Catalogo.Aplicacao.DTO;
+using Catalogo.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +46,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpPost]
-        public ActionResult CriarNovacategoria([FromBody] Categoria categoria)
+        public ActionResult CriarNovacategoria([FromBody] CategoriaModel categoria)
         {
             if (categoria is null)
                 return BadRequest();
@@ -60,7 +60,7 @@ namespace APICatalago.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public ActionResult AtualizarCategoria(int id, [FromBody] Categoria categoria)
+        public ActionResult AtualizarCategoria(int id, [FromBody] CategoriaModel categoria)
         {
             if (categoria is null || id != categoria.CategoriaId)
                 return BadRequest();
