@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Catalogo.Aplicacao.Mappings;
+using Catalogo.Aplicacao.Mappings.Categoria;
+using Catalogo.Aplicacao.Mappings.Produto;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,8 @@ namespace Catalogo.Ioc.InjecaoDependencias
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new ProdutoMappings());
+                mc.AddProfile(new CategoriaMappings());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             servicos.AddSingleton(mapper);
