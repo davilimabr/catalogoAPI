@@ -22,12 +22,12 @@ namespace Catalogo.Aplicacao.Services.Categoria
             _mapper = mapper;
         }
 
-        public void Executar(CategoriaRequestDto categoria)
+        public async Task Executar(CategoriaRequestDto categoria)
         {
             var categoriaModel = _mapper.Map<CategoriaModel>(categoria);
             
             _dbContext.Categorias.Add(categoriaModel);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

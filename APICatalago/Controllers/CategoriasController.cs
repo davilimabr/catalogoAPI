@@ -33,9 +33,9 @@ namespace APICatalago.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CategoriaResponseDto>> ObterCategorias()
+        public async Task<ActionResult<IEnumerable<CategoriaResponseDto>>> ObterCategorias()
         {
-            var categorias = _obterCategorias.Executar();
+            var categorias = await _obterCategorias.Executar();
 
             if (categorias is null)
                 return NotFound();
@@ -45,9 +45,9 @@ namespace APICatalago.Controllers
 
         [HttpGet]
         [Route("{id:int:min(1)}", Name = "ObterCategoria")]
-        public ActionResult<CategoriaResponseDto> ObterCategoriaPorId(int id)
+        public async Task<ActionResult<CategoriaResponseDto>> ObterCategoriaPorId(int id)
         {
-            var categoria = _obterCategoriaPorId.Executar(id);
+            var categoria = await _obterCategoriaPorId.Executar(id);
 
             if (categoria is null)
                 return NotFound();
@@ -56,33 +56,33 @@ namespace APICatalago.Controllers
         }
 
         [HttpPost]
-        public ActionResult CriarNovacategoria([FromBody] CategoriaRequestDto categoria)
+        public async Task<ActionResult> CriarNovacategoria([FromBody] CategoriaRequestDto categoria)
         {
             if (categoria is null)
                 return BadRequest();
 
-            _adicionarCategoria.Executar(categoria);
+            await _adicionarCategoria.Executar(categoria);
 
             return Ok(categoria);
         }
 
         [HttpPut]
         [Route("{id:int:min(1)}")]
-        public ActionResult AtualizarCategoria(int id, [FromBody] CategoriaModel categoria)
+        public async Task<ActionResult> AtualizarCategoria(int id, [FromBody] CategoriaModel categoria)
         {
             if (categoria is null || id != categoria.CategoriaId)
                 return BadRequest();
 
-            _atualizarCategoria.Executar(categoria);
+            await _atualizarCategoria.Executar(categoria);
 
             return Ok(categoria);
         }
 
         [HttpDelete]
         [Route("{id:int:min(1)}")]
-        public ActionResult DeletarCategoria(int id)
+        public async Task<ActionResult> DeletarCategoria(int id)
         {
-            _deletarCategoria.Executar(id);
+            await _deletarCategoria.Executar(id);
 
             return NoContent();
         }

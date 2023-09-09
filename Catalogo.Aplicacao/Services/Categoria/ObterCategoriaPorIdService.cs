@@ -23,9 +23,9 @@ namespace Catalogo.Aplicacao.Services.Categoria
             _mapper = mapper;
         }
 
-        public CategoriaResponseDto Executar(int id)
+        public async Task<CategoriaResponseDto> Executar(int id)
         {
-            var categoria = _dbContext.Categorias.Include(p => p.Produtos).FirstOrDefault(c => c.CategoriaId == id);
+            var categoria = await _dbContext.Categorias.Include(p => p.Produtos).FirstOrDefaultAsync(c => c.CategoriaId == id);
             return _mapper.Map<CategoriaResponseDto>(categoria); 
         }
     }

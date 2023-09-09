@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Categoria
 {
     public interface IAdicionarCategoria
     {
-        void Executar(CategoriaRequestDto categoria);
+        Task Executar(CategoriaRequestDto categoria);
     }
 }

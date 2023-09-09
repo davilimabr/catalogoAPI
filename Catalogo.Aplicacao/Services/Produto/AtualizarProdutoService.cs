@@ -14,10 +14,10 @@ namespace Catalogo.Aplicacao.Services.Produto
     {
         private readonly AppDBContext _dbContext;
         public AtualizarProdutoService(AppDBContext dBcontext) => _dbContext = dBcontext;
-        public void Executar(ProdutoModel produto)
+        public async Task Executar(ProdutoModel produto)
         {
             _dbContext.Entry(produto).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

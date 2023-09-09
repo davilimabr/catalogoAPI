@@ -15,14 +15,14 @@ namespace Catalogo.Aplicacao.Services.Categoria
         private readonly AppDBContext _dbContext;
         public DeletarCategoriaService(AppDBContext dBcontext) => _dbContext = dBcontext;
        
-        public void Executar(int id)
+        public async Task Executar(int id)
         {
             var categoria = _dbContext.Categorias.FirstOrDefault(c => c.CategoriaId == id);
 
             if (categoria != null)
             {
                 _dbContext.Remove(categoria);
-                _dbContext.SaveChanges();
+               await _dbContext.SaveChangesAsync();
             }
         }
     }

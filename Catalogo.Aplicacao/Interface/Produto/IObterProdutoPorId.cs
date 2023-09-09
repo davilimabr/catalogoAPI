@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Produto
 {
     public interface IObterProdutoPorId
     {
-        ProdutoResponseDto Executar(int id);
+        Task<ProdutoResponseDto> Executar(int id);
     }
 }

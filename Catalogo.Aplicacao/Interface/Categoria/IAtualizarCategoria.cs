@@ -10,6 +10,6 @@ namespace Catalogo.Aplicacao.Interface.Categoria
 {
     public interface IAtualizarCategoria
     {
-        void Executar(CategoriaModel categoria);
+        Task Executar(CategoriaModel categoria);
     }
 }

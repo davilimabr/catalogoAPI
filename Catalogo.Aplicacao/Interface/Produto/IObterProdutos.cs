@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Produto
 {
     public interface IObterProdutos
     {
-        IEnumerable<ProdutoResponseDto> Executar();
+        Task<IEnumerable<ProdutoResponseDto>> Executar();
     }
 }

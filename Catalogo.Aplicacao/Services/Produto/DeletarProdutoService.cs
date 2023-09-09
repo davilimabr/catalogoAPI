@@ -13,14 +13,14 @@ namespace Catalogo.Aplicacao.Services.Produto
         private readonly AppDBContext _dbContext;
         public DeletarProdutoService(AppDBContext dbContext) =>_dbContext = dbContext;
 
-        public void Executar(int id)
+        public async Task Executar(int id)
         {
             var produto = _dbContext.Produtos.FirstOrDefault(produto => produto.ProdutoId == id);
 
             if (produto != null)
             {
                 _dbContext.Remove(produto);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
     }

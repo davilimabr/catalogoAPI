@@ -14,10 +14,10 @@ namespace Catalogo.Aplicacao.Services.Categoria
     {
         private readonly AppDBContext _dbContext;
         public AtualizarCategoriaService(AppDBContext dBcontext) => _dbContext = dBcontext;
-        public void Executar(CategoriaModel categoria)
+        public async Task Executar(CategoriaModel categoria)
         {
             _dbContext.Entry(categoria).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

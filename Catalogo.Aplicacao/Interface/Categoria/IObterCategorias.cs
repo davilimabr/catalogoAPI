@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Categoria
 {
     public interface IObterCategorias
     {
-        IEnumerable<CategoriaResponseDto> Executar();
+        Task<IEnumerable<CategoriaResponseDto>> Executar();
     }
 }

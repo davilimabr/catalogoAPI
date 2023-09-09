@@ -8,6 +8,6 @@ namespace Catalogo.Aplicacao.Interface.Categoria
 {
     public interface IDeletarCategoria
     {
-        void Executar(int id);
+        Task Executar(int id);
     }
 }

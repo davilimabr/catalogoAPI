@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Produto
 {
     public interface IAtualizarProduto
     {
-        void Executar(ProdutoModel produto);
+        Task Executar(ProdutoModel produto);
     }
 }

@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Categoria
 {
     public interface IObterCategoriaPorId
     {
-        CategoriaResponseDto Executar(int id); 
+        Task<CategoriaResponseDto> Executar(int id); 
     }
 }

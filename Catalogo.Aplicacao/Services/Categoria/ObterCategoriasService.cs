@@ -22,9 +22,9 @@ namespace Catalogo.Aplicacao.Services.Categoria
             _mapper = mapper;
         }
 
-        public IEnumerable<CategoriaResponseDto> Executar()
+        public async Task<IEnumerable<CategoriaResponseDto>> Executar()
         {
-            var categorias = _dbContext.Categorias.Include(p => p.Produtos).ToList();
+            var categorias = await _dbContext.Categorias.Include(p => p.Produtos).ToListAsync();
             return _mapper.Map<IEnumerable<CategoriaResponseDto>>(categorias);
         }
     }

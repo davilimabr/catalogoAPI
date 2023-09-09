@@ -21,9 +21,9 @@ namespace Catalogo.Aplicacao.Services.Produtos
             _mapper = mapper;
         } 
 
-        public IEnumerable<ProdutoResponseDto> Executar()
+        public async Task<IEnumerable<ProdutoResponseDto>> Executar()
         {
-            var produtos = _dbContext.Produtos.Include(c => c.Categoria).ToList();
+            var produtos = await _dbContext.Produtos.Include(c => c.Categoria).ToListAsync();
             return _mapper.Map<IEnumerable<ProdutoResponseDto>>(produtos); 
         }
     }

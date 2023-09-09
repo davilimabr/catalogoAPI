@@ -22,12 +22,12 @@ namespace Catalogo.Aplicacao.Services.Produto
             _mapper = mapper;
         } 
         
-        public void Executar(ProdutoRequestDto produto)
+        public async Task Executar(ProdutoRequestDto produto)
         {
             var produtoModel = _mapper.Map<ProdutoModel>(produto);
 
             _dbContext.Produtos.Add(produtoModel);
-            _dbContext.SaveChanges();   
+            await _dbContext.SaveChangesAsync();   
         }
     }
 }

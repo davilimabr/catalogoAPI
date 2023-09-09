@@ -21,9 +21,9 @@ namespace Catalogo.Aplicacao.Services.Produto
             _mapper = mapper;
         }
 
-        public ProdutoResponseDto Executar(int id)
+        public async Task<ProdutoResponseDto> Executar(int id)
         {
-            var produto = _dbContext.Produtos.Include(c => c.Categoria).FirstOrDefault(produto => produto.ProdutoId == id);
+            var produto = await _dbContext.Produtos.Include(c => c.Categoria).FirstOrDefaultAsync(produto => produto.ProdutoId == id);
             return _mapper.Map<ProdutoResponseDto>(produto);
         }
     }

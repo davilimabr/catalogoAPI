@@ -31,9 +31,9 @@ namespace APICatalago.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ProdutoResponseDto>> ObterProdutos()
+        public async Task<ActionResult<IEnumerable<ProdutoResponseDto>>> ObterProdutos()
         {
-            var produtos = _obterProdutos.Executar();
+            var produtos =  await _obterProdutos.Executar();
 
             if (produtos is null)
                 return NotFound();
@@ -43,9 +43,9 @@ namespace APICatalago.Controllers
 
         [HttpGet]
         [Route("{id:int:min(1)}", Name = "ObterProduto")]
-        public ActionResult<ProdutoResponseDto> ObterProdutoPorId(int id)
+        public async Task<ActionResult<ProdutoResponseDto>> ObterProdutoPorId(int id)
         {
-            var produto = _obterProdutoPorId.Executar(id);
+            var produto = await _obterProdutoPorId.Executar(id);
 
             if (produto is null)
                 return NotFound();
@@ -54,34 +54,33 @@ namespace APICatalago.Controllers
         }
 
         [HttpPost]
-        public ActionResult CriarNovoProduto([FromBody] ProdutoRequestDto produto)
+        public async Task<ActionResult> CriarNovoProduto([FromBody] ProdutoRequestDto produto)
         {
             if (produto is null)
                 return BadRequest();
             
-            _adicionarProduto.Executar(produto);
-
+            await _adicionarProduto.Executar(produto);
 
             return Ok();
         }
 
         [HttpPut]
         [Route("{id:int:min(1)}")]
-        public ActionResult AtualizarProduto(int id, [FromBody] ProdutoModel produto)
+        public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoModel produto)
         {
             if (produto is null || id != produto.ProdutoId)
                 return BadRequest();
 
-            _atualizarProduto.Executar(produto);
+            await _atualizarProduto.Executar(produto);
 
             return Ok(produto);
         }
 
         [HttpDelete]
         [Route("{id:int:min(1)}")]
-        public ActionResult DeletarProduto(int id)
+        public async Task<ActionResult> DeletarProduto(int id)
         {
-            _deletarProduto.Executar(id);
+            await _deletarProduto.Executar(id);
 
             return NoContent();
         }
