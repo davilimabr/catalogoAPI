@@ -44,7 +44,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}", Name = "ObterCategoria")]
+        [Route("{id:int:min(1)}", Name = "ObterCategoria")]
         public ActionResult<CategoriaResponseDto> ObterCategoriaPorId(int id)
         {
             var categoria = _obterCategoriaPorId.Executar(id);
@@ -67,7 +67,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:int:min(1)}")]
         public ActionResult AtualizarCategoria(int id, [FromBody] CategoriaModel categoria)
         {
             if (categoria is null || id != categoria.CategoriaId)
@@ -79,7 +79,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("{id:int:min(1)}")]
         public ActionResult DeletarCategoria(int id)
         {
             _deletarCategoria.Executar(id);

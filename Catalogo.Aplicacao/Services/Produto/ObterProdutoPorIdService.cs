@@ -2,6 +2,7 @@
 using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Catalogo.Aplicacao.Services.Produto
 
         public ProdutoResponseDto Executar(int id)
         {
-            var produto = _dbContext.Produtos.FirstOrDefault(produto => produto.ProdutoId == id);
+            var produto = _dbContext.Produtos.Include(c => c.Categoria).FirstOrDefault(produto => produto.ProdutoId == id);
             return _mapper.Map<ProdutoResponseDto>(produto);
         }
     }

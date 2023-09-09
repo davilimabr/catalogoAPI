@@ -42,7 +42,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}", Name = "ObterProduto")]
+        [Route("{id:int:min(1)}", Name = "ObterProduto")]
         public ActionResult<ProdutoResponseDto> ObterProdutoPorId(int id)
         {
             var produto = _obterProdutoPorId.Executar(id);
@@ -66,7 +66,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:int:min(1)}")]
         public ActionResult AtualizarProduto(int id, [FromBody] ProdutoModel produto)
         {
             if (produto is null || id != produto.ProdutoId)
@@ -78,7 +78,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("{id:int:min(1)}")]
         public ActionResult DeletarProduto(int id)
         {
             _deletarProduto.Executar(id);

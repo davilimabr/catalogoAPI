@@ -20,7 +20,7 @@ public class CategoriaModel
     public String? ImagemURL{ get; set; }
 
     [JsonIgnore]
-    public ICollection<ProdutoModel>? Produtos { get; set; }
+    public IEnumerable<ProdutoModel>? Produtos { get; set; }
 
     public CategoriaModel() => Produtos = new Collection<ProdutoModel>();
 }

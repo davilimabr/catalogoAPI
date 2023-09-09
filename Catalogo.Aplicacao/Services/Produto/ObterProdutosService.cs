@@ -2,6 +2,7 @@
 using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Catalogo.Aplicacao.Services.Produtos
 
         public IEnumerable<ProdutoResponseDto> Executar()
         {
-            var produtos = _dbContext.Produtos.ToList();
+            var produtos = _dbContext.Produtos.Include(c => c.Categoria).ToList();
             return _mapper.Map<IEnumerable<ProdutoResponseDto>>(produtos); 
         }
     }
