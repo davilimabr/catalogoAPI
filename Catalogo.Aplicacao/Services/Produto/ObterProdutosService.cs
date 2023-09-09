@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Catalogo.Aplicacao.Context;
-using Catalogo.Aplicacao.DTO;
+using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
 using System;
 using System.Collections.Generic;
@@ -20,10 +20,10 @@ namespace Catalogo.Aplicacao.Services.Produtos
             _mapper = mapper;
         } 
 
-        public IEnumerable<ProdutoDto> Executar()
+        public IEnumerable<ProdutoResponseDto> Executar()
         {
             var produtos = _dbContext.Produtos.ToList();
-            return _mapper.Map<IEnumerable<ProdutoDto>>(produtos); 
+            return _mapper.Map<IEnumerable<ProdutoResponseDto>>(produtos); 
         }
     }
 }

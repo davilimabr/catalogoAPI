@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.DTO;
+using Catalogo.Aplicacao.DTO.Request;
 using Catalogo.Aplicacao.Interface.Produto;
 using Catalogo.Domain.Models;
 using System;
@@ -14,11 +15,18 @@ namespace Catalogo.Aplicacao.Services.Produto
     public class AdicionarProdutoService : IAdicionarProduto
     {
         private readonly AppDBContext _dbContext;
-        public AdicionarProdutoService(AppDBContext dBcontext) => _dbContext = dBcontext;   
-        
-        public void Executar(ProdutoModel produto)
+        private readonly IMapper _mapper;
+        public AdicionarProdutoService(AppDBContext dBcontext, IMapper mapper)
         {
-            _dbContext.Produtos.Add(produto);
+            _dbContext = dBcontext;
+            _mapper = mapper;
+        } 
+        
+        public void Executar(ProdutoRequestDto produto)
+        {
+            var produtoModel = _mapper.Map<ProdutoModel>(produto);
+
+            _dbContext.Produtos.Add(produtoModel);
             _dbContext.SaveChanges();   
         }
     }

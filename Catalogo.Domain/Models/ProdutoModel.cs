@@ -10,7 +10,7 @@ public class ProdutoModel
 {
 
     [Key]
-    public int? ProdutoId{ get; set; }
+    public int ProdutoId{ get; set; }
 
     [Required]
     [StringLength(80)]

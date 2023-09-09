@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Catalogo.Aplicacao.Context;
-using Catalogo.Aplicacao.DTO;
+using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
 using System;
 using System.Collections.Generic;
@@ -20,10 +20,10 @@ namespace Catalogo.Aplicacao.Services.Produto
             _mapper = mapper;
         }
 
-        public ProdutoDto Executar(int id)
+        public ProdutoResponseDto Executar(int id)
         {
             var produto = _dbContext.Produtos.FirstOrDefault(produto => produto.ProdutoId == id);
-            return _mapper.Map<ProdutoDto>(produto);
+            return _mapper.Map<ProdutoResponseDto>(produto);
         }
     }
 }

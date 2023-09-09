@@ -1,4 +1,5 @@
-﻿using Catalogo.Aplicacao.DTO;
+﻿using Catalogo.Aplicacao.DTO.Request;
+using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
 using Catalogo.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +31,7 @@ namespace APICatalago.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ProdutoDto>> ObterProdutos()
+        public ActionResult<IEnumerable<ProdutoResponseDto>> ObterProdutos()
         {
             var produtos = _obterProdutos.Executar();
 
@@ -42,7 +43,7 @@ namespace APICatalago.Controllers
 
         [HttpGet]
         [Route("{id:int}", Name = "ObterProduto")]
-        public ActionResult<ProdutoDto> ObterProdutoPorId(int id)
+        public ActionResult<ProdutoResponseDto> ObterProdutoPorId(int id)
         {
             var produto = _obterProdutoPorId.Executar(id);
 
@@ -53,15 +54,15 @@ namespace APICatalago.Controllers
         }
 
         [HttpPost]
-        public ActionResult CriarNovoProduto([FromBody] ProdutoModel produto)
+        public ActionResult CriarNovoProduto([FromBody] ProdutoRequestDto produto)
         {
             if (produto is null)
                 return BadRequest();
-
+            
             _adicionarProduto.Executar(produto);
 
-            return new CreatedAtRouteResult("ObterProduto",
-              new { id = produto.ProdutoId }, produto);
+
+            return Ok();
         }
 
         [HttpPut]

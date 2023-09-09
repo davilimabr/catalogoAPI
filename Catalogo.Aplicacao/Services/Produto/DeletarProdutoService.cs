@@ -17,7 +17,7 @@ namespace Catalogo.Aplicacao.Services.Produto
         {
             var produto = _dbContext.Produtos.FirstOrDefault(produto => produto.ProdutoId == id);
 
-            if (!(produto is null))
+            if (produto != null)
             {
                 _dbContext.Remove(produto);
                 _dbContext.SaveChanges();
