@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Catalogo.Aplicacao.Interface.Produto
+namespace Catalogo.Aplicacao.Interface.Categoria
 {
-    public interface IObterProdutoPorId
+    public interface IObterCategorias
     {
-        ProdutoResponseDto Executar(int id);
+        IEnumerable<CategoriaResponseDto> Executar();
     }
 }

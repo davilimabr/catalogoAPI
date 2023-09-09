@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Catalogo.Aplicacao.Context;
-using Catalogo.Aplicacao.DTO;
+using Catalogo.Aplicacao.DTO.Request;
+using Catalogo.Aplicacao.DTO.Response;
+using Catalogo.Aplicacao.Interface.Categoria;
 using Catalogo.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,50 +14,56 @@ namespace APICatalago.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDBContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IObterCategorias _obterCategorias;
+        private readonly IObterCategoriaPorId _obterCategoriaPorId;
+        private readonly IAdicionarCategoria _adicionarCategoria;
+        private readonly IAtualizarCategoria _atualizarCategoria;
+        private readonly IDeletarCategoria _deletarCategoria;
 
-
-        public CategoriasController(AppDBContext context, IMapper mapper)
+        public CategoriasController(
+            IObterCategorias obterCategorias, IObterCategoriaPorId obterCategoriaPorId,
+            IAdicionarCategoria adicionarCategoria, IAtualizarCategoria atualizarCategoria,
+            IDeletarCategoria deletarCategoria)
         {
-            _dbContext = context;
-            _mapper = mapper;
+            _obterCategorias = obterCategorias;
+            _obterCategoriaPorId = obterCategoriaPorId;
+            _adicionarCategoria = adicionarCategoria;
+            _atualizarCategoria = atualizarCategoria;
+            _deletarCategoria = deletarCategoria;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CategoriaDto>> ObterCategorias()
+        public ActionResult<IEnumerable<CategoriaResponseDto>> ObterCategorias()
         {
-            var categorias = _dbContext.Categorias.ToList();
+            var categorias = _obterCategorias.Executar();
 
             if (categorias is null)
                 return NotFound();
 
-            return Ok(_mapper.Map<IEnumerable<CategoriaDto>>(categorias));
+            return Ok(categorias);
         }
 
         [HttpGet]
         [Route("{id:int}", Name = "ObterCategoria")]
-        public ActionResult<CategoriaDto> ObterCategoriaPorId(int id)
+        public ActionResult<CategoriaResponseDto> ObterCategoriaPorId(int id)
         {
-            var categoria = _dbContext.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+            var categoria = _obterCategoriaPorId.Executar(id);
 
             if (categoria is null)
                 return NotFound();
 
-            return Ok(_mapper.Map<CategoriaDto>(categoria));
+            return Ok(categoria);
         }
 
         [HttpPost]
-        public ActionResult CriarNovacategoria([FromBody] CategoriaModel categoria)
+        public ActionResult CriarNovacategoria([FromBody] CategoriaRequestDto categoria)
         {
             if (categoria is null)
                 return BadRequest();
 
-            _dbContext.Categorias.Add(categoria);
-            _dbContext.SaveChanges();
+            _adicionarCategoria.Executar(categoria);
 
-            return new CreatedAtRouteResult("ObterProduto",
-              new { id = categoria.CategoriaId }, categoria);
+            return Ok(categoria);
         }
 
         [HttpPut]
@@ -65,8 +73,7 @@ namespace APICatalago.Controllers
             if (categoria is null || id != categoria.CategoriaId)
                 return BadRequest();
 
-            _dbContext.Entry(categoria).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            _atualizarCategoria.Executar(categoria);
 
             return Ok(categoria);
         }
@@ -75,15 +82,9 @@ namespace APICatalago.Controllers
         [Route("{id:int}")]
         public ActionResult DeletarCategoria(int id)
         {
-            var categoria = _dbContext.Categorias.FirstOrDefault(c => c.CategoriaId == id);
-
-            if (categoria is null) return NotFound();
-
-            _dbContext.Remove(categoria);
-            _dbContext.SaveChanges();
+            _deletarCategoria.Executar(id);
 
             return NoContent();
-
         }
     }
 }

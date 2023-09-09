@@ -1,4 +1,4 @@
-﻿using Catalogo.Aplicacao.DTO;
+﻿using Catalogo.Aplicacao.DTO.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace Catalogo.Aplicacao.Interface.Produto
 {
     public interface IObterProdutos
     {
-        IEnumerable<ProdutoDto> Executar();
+        IEnumerable<ProdutoResponseDto> Executar();
     }
 }

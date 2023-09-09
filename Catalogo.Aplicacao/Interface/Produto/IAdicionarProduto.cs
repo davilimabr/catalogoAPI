@@ -1,4 +1,5 @@
 ﻿using Catalogo.Aplicacao.DTO;
+using Catalogo.Aplicacao.DTO.Request;
 using Catalogo.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Catalogo.Aplicacao.Interface.Produto
 {
     public interface IAdicionarProduto
     {
-        void Executar(ProdutoModel produto);
+        void Executar(ProdutoRequestDto produto);
     }
 }
