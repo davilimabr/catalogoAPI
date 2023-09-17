@@ -2,6 +2,7 @@
 using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Categoria;
+using Catalogo.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,10 @@ namespace Catalogo.Aplicacao.Services.Categoria
         public async Task<IEnumerable<CategoriaResponseDto>> Executar()
         {
             var categorias = await _dbContext.Categorias.Include(p => p.Produtos).ToListAsync();
+
+            if (categorias == null)
+                throw new RecursoNaoEncontradoException("Categorias não encontradas.");
+
             return _mapper.Map<IEnumerable<CategoriaResponseDto>>(categorias);
         }
     }

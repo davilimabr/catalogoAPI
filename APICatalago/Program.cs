@@ -1,3 +1,4 @@
+using Catalogo.API.Middleware.Erro;
 using Catalogo.Ioc;
 using System.Text.Json.Serialization;
 
@@ -26,6 +27,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseErroMiddleware();
 
 app.MapControllers();
 

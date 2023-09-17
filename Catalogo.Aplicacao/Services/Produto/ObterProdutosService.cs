@@ -2,6 +2,7 @@
 using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
+using Catalogo.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,10 @@ namespace Catalogo.Aplicacao.Services.Produtos
         public async Task<IEnumerable<ProdutoResponseDto>> Executar()
         {
             var produtos = await _dbContext.Produtos.Include(c => c.Categoria).ToListAsync();
+
+            if (produtos == null || !produtos.Any())
+                throw new RecursoNaoEncontradoException("Produtos não encontrados.");
+
             return _mapper.Map<IEnumerable<ProdutoResponseDto>>(produtos); 
         }
     }

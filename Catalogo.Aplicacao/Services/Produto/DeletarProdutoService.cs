@@ -1,10 +1,6 @@
 ﻿using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.Interface.Produto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Catalogo.Domain.Exceptions;
 
 namespace Catalogo.Aplicacao.Services.Produto
 {
@@ -17,11 +13,11 @@ namespace Catalogo.Aplicacao.Services.Produto
         {
             var produto = _dbContext.Produtos.FirstOrDefault(produto => produto.ProdutoId == id);
 
-            if (produto != null)
-            {
-                _dbContext.Remove(produto);
-                await _dbContext.SaveChangesAsync();
-            }
+            if (produto == null)
+                throw new RecursoNaoEncontradoException("Produto não encontrado.");
+                
+           _dbContext.Remove(produto);
+           await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -2,12 +2,8 @@
 using Catalogo.Aplicacao.Context;
 using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
+using Catalogo.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalogo.Aplicacao.Services.Produto
 {
@@ -24,6 +20,10 @@ namespace Catalogo.Aplicacao.Services.Produto
         public async Task<ProdutoResponseDto> Executar(int id)
         {
             var produto = await _dbContext.Produtos.Include(c => c.Categoria).FirstOrDefaultAsync(produto => produto.ProdutoId == id);
+
+            if (produto == null)
+                throw new RecursoNaoEncontradoException("Produto não encontrado.");
+
             return _mapper.Map<ProdutoResponseDto>(produto);
         }
     }
