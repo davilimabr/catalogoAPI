@@ -13,27 +13,10 @@ namespace APICatalago.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly IObterProdutos _obterProdutos;
-        private readonly IObterProdutoPorId _obterProdutoPorId;
-        private readonly IAdicionarProduto _adicionarProduto;
-        private readonly IAtualizarProduto _atualizarProduto;
-        private readonly IDeletarProduto _deletarProduto;
-
-        public ProdutosController(
-            IObterProdutos obterProdutos, IObterProdutoPorId obterProdutoPorId, IAdicionarProduto adicionarProduto,
-            IAtualizarProduto atualizarProduto, IDeletarProduto deletarProduto)
-        {
-            _obterProdutos = obterProdutos;
-            _obterProdutoPorId = obterProdutoPorId;
-            _adicionarProduto = adicionarProduto;
-            _atualizarProduto = atualizarProduto;
-            _deletarProduto = deletarProduto;
-        }
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProdutoResponseDto>>> ObterProdutos()
+        public async Task<ActionResult<IEnumerable<ProdutoResponseDto>>> ObterProdutos([FromServices] IObterProdutos obterProdutos)
         {
-            var produtos =  await _obterProdutos.Executar();
+            var produtos =  await obterProdutos.Executar();
 
             if (produtos is null)
                 return NotFound();
@@ -43,9 +26,9 @@ namespace APICatalago.Controllers
 
         [HttpGet]
         [Route("{id:int:min(1)}", Name = "ObterProduto")]
-        public async Task<ActionResult<ProdutoResponseDto>> ObterProdutoPorId(int id)
+        public async Task<ActionResult<ProdutoResponseDto>> ObterProdutoPorId([FromRoute] int id, [FromServices] IObterProdutoPorId obterProdutoPorId)
         {
-            var produto = await _obterProdutoPorId.Executar(id);
+            var produto = await obterProdutoPorId.Executar(id);
 
             if (produto is null)
                 return NotFound();
@@ -54,33 +37,33 @@ namespace APICatalago.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CriarNovoProduto([FromBody] ProdutoRequestDto produto)
+        public async Task<ActionResult> CriarNovoProduto([FromBody] ProdutoRequestDto produto, [FromServices] IAdicionarProduto adicionarProduto)
         {
             if (produto is null)
                 return BadRequest();
             
-            await _adicionarProduto.Executar(produto);
+            await adicionarProduto.Executar(produto);
 
             return Ok();
         }
 
         [HttpPut]
         [Route("{id:int:min(1)}")]
-        public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoModel produto)
+        public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoModel produto, [FromServices] IAtualizarProduto atualizarProduto)
         {
             if (produto is null || id != produto.ProdutoId)
                 return BadRequest();
 
-            await _atualizarProduto.Executar(produto);
+            await atualizarProduto.Executar(produto);
 
             return Ok(produto);
         }
 
         [HttpDelete]
         [Route("{id:int:min(1)}")]
-        public async Task<ActionResult> DeletarProduto(int id)
+        public async Task<ActionResult> DeletarProduto(int id, [FromServices] IDeletarProduto deletarProduto)
         {
-            await _deletarProduto.Executar(id);
+            await deletarProduto.Executar(id);
 
             return NoContent();
         }
