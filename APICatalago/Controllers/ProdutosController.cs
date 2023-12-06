@@ -2,10 +2,7 @@
 using Catalogo.Aplicacao.DTO.Response;
 using Catalogo.Aplicacao.Interface.Produto;
 using Catalogo.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 
 namespace APICatalago.Controllers
 {

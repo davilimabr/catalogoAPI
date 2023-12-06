@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Catalogo.Ioc.InjecaoDependencias;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogo.Ioc.InjecaoDependencias;
 
 namespace Catalogo.Ioc
 {
@@ -16,6 +11,7 @@ namespace Catalogo.Ioc
             servicos.AddMapper();
             servicos.AddDbContext(configuracao);
             servicos.AddServices();
-        }        
+            servicos.AddApplicationInsightsTelemetry();
+        }
     }
 }

@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using Catalogo.Aplicacao.Context;
-using Catalogo.Aplicacao.DTO;
 using Catalogo.Aplicacao.DTO.Request;
 using Catalogo.Aplicacao.Interface.Produto;
 using Catalogo.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
+using Microsoft.Extensions.Logging;
 
 namespace Catalogo.Aplicacao.Services.Produto
 {
@@ -16,10 +12,15 @@ namespace Catalogo.Aplicacao.Services.Produto
     {
         private readonly AppDBContext _dbContext;
         private readonly IMapper _mapper;
-        public AdicionarProdutoService(AppDBContext dBcontext, IMapper mapper)
+        private readonly TelemetryClient _telemetryClient;
+        private readonly ILogger _logger;
+
+        public AdicionarProdutoService(AppDBContext dBcontext, IMapper mapper, ILogger<AdicionarProdutoService> logger, TelemetryClient telemetryClient)
         {
             _dbContext = dBcontext;
             _mapper = mapper;
+            _logger = logger;
+            _telemetryClient = telemetryClient;
         } 
         
         public async Task Executar(ProdutoRequestDto produto)
@@ -27,7 +28,8 @@ namespace Catalogo.Aplicacao.Services.Produto
             var produtoModel = _mapper.Map<ProdutoModel>(produto);
 
             _dbContext.Produtos.Add(produtoModel);
-            await _dbContext.SaveChangesAsync();   
+            await _dbContext.SaveChangesAsync();
+            _telemetryClient.TrackEvent("produto adicionado");
         }
     }
 }
